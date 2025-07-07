@@ -1,0 +1,12 @@
+fastapi
+uvicorn[standard]
+httpx
+pydantic-settings
+sqlalchemy[asyncio]
+psycopg2-binary
+aioredis
+redis
+pytest
+requests
+pandas
+apscheduler
