@@ -1,0 +1,38 @@
+name: Backend CI
+
+# This workflow runs on every push or pull request to the main branch
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  # This job is named 'build-and-test'
+  build-and-test:
+    # It runs on the latest version of Ubuntu
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Check out your repository code
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # Step 2: Set up Python
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      # Step 3: Install dependencies
+      # It runs the command from within the backend directory
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r backend/requirements.txt
+
+      # Step 4: Run tests with pytest
+      # This is where your unit tests will be executed automatically
+      - name: Test with pytest
+        run: |
+          pytest backend/tests/
