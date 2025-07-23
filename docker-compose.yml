@@ -1,4 +1,4 @@
-version: '3.8'
+
 
 services:
   # --- Infrastructure ---
@@ -17,45 +17,69 @@ services:
 
   # --- Backend Services ---
   api_gateway:
-    build: ./backend/api_gateway
+    build:
+      context: ./backend
+      dockerfile: api_gateway/Dockerfile
     ports: ["8000:8000"]
-    env_file: ./backend/.env
+    env_file: ./.env
+    volumes:
+      - ./backend:/app
     depends_on: [economic_service, sentiment_service, technicals_service, cross_asset_service]
 
   economic_service:
-    build: ./backend/services/economic_service
-    env_file: ./backend/.env
+    build:
+      context: ./backend
+      dockerfile: services/economic_service/Dockerfile
+    env_file: ./.env
+    volumes:
+      - ./backend:/app
     depends_on: [redis]
 
   sentiment_service:
-    build: ./backend/services/sentiment_service
-    env_file: ./backend/.env
+    build:
+      context: ./backend
+      dockerfile: services/sentiment_service/Dockerfile
+    env_file: ./.env
+    volumes:
+      - ./backend:/app
     depends_on: [redis]
 
   technicals_service:
-    build: ./backend/services/technicals_service
-    env_file: ./backend/.env
+    build:
+      context: ./backend
+      dockerfile: services/technicals_service/Dockerfile
+    env_file: ./.env
+    volumes:
+      - ./backend:/app
     depends_on: [redis]
 
   cross_asset_service:
-    build: ./backend/services/cross_asset_service
-    env_file: ./backend/.env
+    build:
+      context: ./backend
+      dockerfile: services/cross_asset_service/Dockerfile
+    env_file: ./.env
+    volumes:
+      - ./backend:/app
     depends_on: [redis]
 
   scheduler:
-    build: ./backend/scheduler
-    env_file: ./backend/.env
+    build:
+      context: ./backend
+      dockerfile: scheduler/Dockerfile
+    env_file: ./.env
+    volumes:
+      - ./backend:/app
     depends_on: [economic_service, sentiment_service, technicals_service, cross_asset_service]
 
   # --- Frontend ---
-  frontend:
-    build: ./frontend
-    ports: ["5173:5173"]
-    volumes: ["./frontend:/app", "/app/node_modules"]
-    environment:
-      - VITE_API_BASE_URL=http://localhost:8000
-      - VITE_API_KEY=${API_KEY}
-    depends_on: [api_gateway]
+  # frontend:
+  #   build: ./frontend
+  #   ports: ["5173:5173"]
+  #   volumes: ["./frontend:/app", "/app/node_modules"]
+  #   environment:
+  #     - VITE_API_BASE_URL=http://localhost:8000
+  #     - VITE_API_KEY=${API_KEY}
+  #   depends_on: [api_gateway]
 
 volumes:
   postgres_data:

@@ -3,4 +3,4 @@ WORKDIR /app
 COPY ./requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 COPY . .
-CMD ["python", "scheduler/main.py"]
+CMD ["python", "-m", "scheduler.main"]
